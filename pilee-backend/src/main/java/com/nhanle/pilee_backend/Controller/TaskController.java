@@ -21,4 +21,29 @@ public class TaskController {
     public Task createTask(@RequestBody Task task) {
         return taskRepository.save(task);
     }
+
+    @GetMapping("/{id}")
+    public Task getTaskById(@PathVariable Long id) {
+        return taskRepository.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+        Task existing = taskRepository.findById(id).orElse(null);
+        if (existing != null) {
+            existing.setTitle(task.getTitle());
+            existing.setDescription(task.getDescription());
+            existing.setDueDate(task.getDueDate());
+            existing.setPriority(task.getPriority());
+            existing.setStatus(task.getStatus());
+            existing.setCreator(task.getCreator());
+            return taskRepository.save(existing);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        taskRepository.deleteById(id);
+    }
 } 
